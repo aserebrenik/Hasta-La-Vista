@@ -1,0 +1,95 @@
+loaded output.pro - segment 3 (last)
+clause(integers_#VAR(0)_=<_#VAR(1)(#VAR(0),#VAR(1),[#VAR(0)|#VAR(2)]),(#VAR(0)=<#VAR(1),!,#VAR(3)is #VAR(0)+1,integers_#VAR(0)_=<_#VAR(1)(#VAR(3),#VAR(1),#VAR(2)),true))
+clause(integers_#VAR(0)_=<_#VAR(1)(#VAR(4),#VAR(5),[#VAR(4)|#VAR(6)]),(#VAR(4)=<#VAR(5),!,#VAR(7)is #VAR(4)+1,integers_#VAR(0)_>_#VAR(1)(#VAR(7),#VAR(5),#VAR(6)),true))
+clause(integers_#VAR(0)_=<_#VAR(1)(#VAR(8),#VAR(9),[]),true)
+clause(integers_#VAR(0)_>_#VAR(1)(#VAR(10),#VAR(11),[]),true)
+clause(remove(#VAR(12),[],[]),true)
+clause(remove(#VAR(13),[#VAR(14)|#VAR(15)],[#VAR(14)|#VAR(16)]),(0 is #VAR(14)mod #VAR(13),true))
+clause(remove(#VAR(17),[#VAR(18)|#VAR(19)],[#VAR(18)|#VAR(20)]),(!,remove(#VAR(17),#VAR(19),#VAR(20)),true))
+clause(remove(#VAR(21),[#VAR(22)|#VAR(23)],#VAR(24)),(0 is #VAR(22)mod #VAR(21),!,remove(#VAR(21),#VAR(23),#VAR(24)),true))
+clause(sift([],[]),true)
+clause(primes(#VAR(25),#VAR(26)),(integers_#VAR(0)_=<_#VAR(1)(2,#VAR(25),#VAR(27)),sift(#VAR(27),#VAR(26)),true))
+clause(primes(#VAR(25),#VAR(26)),(integers_#VAR(0)_>_#VAR(1)(2,#VAR(25),#VAR(27)),sift(#VAR(27),#VAR(26)),true))
+clause(sift([#VAR(25)|#VAR(26)],[#VAR(25)|#VAR(27)]),(remove(#VAR(25),#VAR(26),#VAR(28)),sift(#VAR(28),#VAR(27)),true))
+***********
+
+[#VAR(0),#VAR(1),#VAR(3),#VAR(4),#VAR(5),#VAR(7),#VAR(8),#VAR(9),#VAR(10),#VAR(11),#VAR(12),#VAR(13),#VAR(17),#VAR(21),#VAR(25)]implies(true,true,remove_0+(#VAR(17)*remove_1+(._0*remove_2+(#VAR(18)*(._1*remove_2)+#VAR(19)*(._2*remove_2))))#>remove_0+(#VAR(17)*remove_1+#VAR(19)*remove_2))
+implies(true,(0=#VAR(22)mod #VAR(21),true),remove_0+(#VAR(21)*remove_1+(._0*remove_2+(#VAR(22)*(._1*remove_2)+#VAR(23)*(._2*remove_2))))#>remove_0+(#VAR(21)*remove_1+#VAR(23)*remove_2))
+implies(remove_e_0* -1+(#VAR(25)*(remove_e_1* -1)+(#VAR(26)*remove_e_2+#VAR(28)*(remove_e_3* -1)))#>=0,true,sift_0+(._0*sift_1+(#VAR(25)*(._1*sift_1)+#VAR(26)*(._2*sift_1)))#>sift_0+#VAR(28)*sift_1)
+implies(#VAR(3)=#VAR(0)+1,(#VAR(0)=<#VAR(1),true),integers_#VAR(0)_=<_#VAR(1)_0+(#VAR(1)*integers_#VAR(0)_=<_#VAR(1)_i_1+#VAR(0)*(-1*integers_#VAR(0)_=<_#VAR(1)_i_1))#>integers_#VAR(0)_=<_#VAR(1)_0+(#VAR(1)*integers_#VAR(0)_=<_#VAR(1)_i_1+#VAR(3)*(-1*integers_#VAR(0)_=<_#VAR(1)_i_1)))
+***********
+
+Loop Termination Proof Decrease Conditions  0.23
+implies(true,true,remove_e_0* -1+#VAR(12)*(remove_e_1* -1)#>=0)
+implies(true,(0=#VAR(14)mod #VAR(13),true),remove_e_0* -1+(#VAR(13)*(remove_e_1* -1)+(._0*remove_e_2+(#VAR(14)*(._1*remove_e_2)+(#VAR(15)*(._2*remove_e_2)+(._0*(remove_e_3* -1)+(#VAR(14)*(._1*(remove_e_3* -1))+#VAR(16)*(._2*(remove_e_3* -1))))))))#>=0)
+implies(remove_e_0* -1+(#VAR(17)*(remove_e_1* -1)+(#VAR(19)*remove_e_2+#VAR(20)*(remove_e_3* -1)))#>=0,true,remove_e_0* -1+(#VAR(17)*(remove_e_1* -1)+(._0*remove_e_2+(#VAR(18)*(._1*remove_e_2)+(#VAR(19)*(._2*remove_e_2)+(._0*(remove_e_3* -1)+(#VAR(18)*(._1*(remove_e_3* -1))+#VAR(20)*(._2*(remove_e_3* -1))))))))#>=0)
+implies(remove_e_0* -1+(#VAR(21)*(remove_e_1* -1)+(#VAR(23)*remove_e_2+#VAR(24)*(remove_e_3* -1)))#>=0,(0=#VAR(22)mod #VAR(21),true),remove_e_0* -1+(#VAR(21)*(remove_e_1* -1)+(._0*remove_e_2+(#VAR(22)*(._1*remove_e_2)+(#VAR(23)*(._2*remove_e_2)+#VAR(24)*(remove_e_3* -1)))))#>=0)
+***********
+
+Loop Termination Proof Model Conditions  0.06
+LINEAR
+implies(true,true,remove_e_0* -1+#VAR(12)*(remove_e_1* -1)#>=0)
+implies(true,(0=#VAR(14)mod #VAR(13),true),remove_e_0* -1+(._0*remove_e_2+(._0*(remove_e_3* -1)+(#VAR(13)*(remove_e_1* -1)+(#VAR(14)*(._1*remove_e_2)+(#VAR(14)*(._1*(remove_e_3* -1))+(#VAR(15)*(._2*remove_e_2)+#VAR(16)*(._2*(remove_e_3* -1))))))))#>=0)
+implies(remove_e_0* -1+(#VAR(17)*(remove_e_1* -1)+(#VAR(19)*remove_e_2+#VAR(20)*(remove_e_3* -1)))#>=0,true,._0*remove_e_2+(._0*(remove_e_3* -1)+(#VAR(18)*(._1*remove_e_2)+(#VAR(18)*(._1*(remove_e_3* -1))+(#VAR(19)*(._2*remove_e_2)+(#VAR(20)*(._2*(remove_e_3* -1))+(#VAR(19)*(remove_e_2* -1)+#VAR(20)*remove_e_3))))))#>=0)
+implies(remove_e_0* -1+(#VAR(21)*(remove_e_1* -1)+(#VAR(23)*remove_e_2+#VAR(24)*(remove_e_3* -1)))#>=0,(0=#VAR(22)mod #VAR(21),true),._0*remove_e_2+(#VAR(22)*(._1*remove_e_2)+(#VAR(23)*(._2*remove_e_2)+#VAR(23)*(remove_e_2* -1)))#>=0)
+implies(true,true,._0*remove_2+(#VAR(18)*(._1*remove_2)+(#VAR(19)*(._2*remove_2)+#VAR(19)*(remove_2* -1)))#>0)
+implies(true,(0=#VAR(22)mod #VAR(21),true),._0*remove_2+(#VAR(22)*(._1*remove_2)+(#VAR(23)*(._2*remove_2)+#VAR(23)*(remove_2* -1)))#>0)
+implies(remove_e_0* -1+(#VAR(25)*(remove_e_1* -1)+(#VAR(26)*remove_e_2+#VAR(28)*(remove_e_3* -1)))#>=0,true,._0*sift_1+(#VAR(25)*(._1*sift_1)+(#VAR(26)*(._2*sift_1)+(#VAR(28)*(sift_1* -1)+(remove_e_0+(#VAR(25)*remove_e_1+(#VAR(26)*(remove_e_2* -1)+#VAR(28)*remove_e_3))))))#>0)
+implies(#VAR(3)=#VAR(0)+1,(#VAR(0)=<#VAR(1),true),#VAR(0)*(-1*integers_#VAR(0)_=<_#VAR(1)_i_1)+(#VAR(0)+1)*integers_#VAR(0)_=<_#VAR(1)_i_1#>0)
+***********
+
+
+NON-LINEAR
+***********
+
+
+All 
+builtin(0=#VAR(14)mod #VAR(13))
+builtin(0=#VAR(22)mod #VAR(21))
+builtin(#VAR(0)=<#VAR(1))
+integers_#VAR(0)_=<_#VAR(1)_i_1#>0
+._0*remove_2#>0
+._0*sift_1+(remove_e_0+(#VAR(25)*(._1*sift_1)+#VAR(25)*remove_e_1))#>0
+._0*remove_e_2#>=0
+._1*remove_2#>=0
+._1*remove_e_2#>=0
+._2*remove_e_2#>=0
+._2*(remove_e_3* -1)#>=0
+._0*remove_e_2+._0*(remove_e_3* -1)#>=0
+._1*remove_e_2+._1*(remove_e_3* -1)#>=0
+._2*remove_2+remove_2* -1#>=0
+._2*remove_e_2+remove_e_2* -1#>=0
+._2*sift_1+remove_e_2* -1#>=0
+._2*(remove_e_3* -1)+remove_e_3#>=0
+remove_e_0* -1+#VAR(12)*(remove_e_1* -1)#>=0
+remove_e_0* -1+(._0*remove_e_2+(._0*(remove_e_3* -1)+#VAR(13)*(remove_e_1* -1)))#>=0
+sift_1* -1+remove_e_3#>=0
+***********
+
+*** Assumptions ***
+#VAR(25)#>0
+#VAR(12)* -1#>=0
+#VAR(13)* -1#>=0
+***********
+
+remove_e_1,1
+._0,1
+._2,1
+remove_2,1
+integers_#VAR(0)_=<_#VAR(1)_i_1,1
+
+Termination is established for the following calls: 
+integers(Int,Int,MAX)-(_218538>_218539)
+***********
+
+
+The program may not terminate for the following calls:
+primes(Int,MAX)
+sift(OR([[] / 0,.([Int,2])]),MAX)
+remove(Int,OR([[] / 0,.([Int,2])]),MAX)
+***********
+
+
+Total:  0.38
+
+TC = [primes('Int','MAX')-'false',sift('OR'(['[] / 0','.'(['Int',2])]),'MAX')-'false',integers('Int','Int','MAX')-(_A>_B),remove('Int','OR'(['[] / 0','.'(['Int',2])]),'MAX')-'false'] ? 

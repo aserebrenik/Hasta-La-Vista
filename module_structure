@@ -1,0 +1,391 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	HASTA LA VISTA
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+adorn.pl::- module(adorn, [code/3, decode/3, code_all/3, decode_all/2,
+adorn.pl::- use_module(library(lists), [append/3]).
+adorn.pl::- use_module(atom, [atom_list_concat/2, comparison/1, fresh_all/2]).
+adorn.pl::- use_module(aux,[flatten/2, without_last/2]).
+adorn.pl::- use_module(numvars, [varname/2]).
+
+adornments.pl::- module(adornments,[get_maximal_prefix/3,ads_main/13]).
+adornments.pl::- use_module(adorn, [code/3, decode/3, original_free_atom/3]).
+adornments.pl::- use_module(atom, [comparison/1, built_in/1,
+adornments.pl::- use_module(apply, [apply/3]).
+adornments.pl::- use_module(aux, [all_in/2, assert_list/2,my_ord_del_element/4,timer/1]).
+adornments.pl::- use_module(check_clp,[check_clp/1]).
+adornments.pl::- use_module(comma, [add_true/2, comma_eliminate_redundancy/2,
+adornments.pl::- use_module(numvars, [diff_vars/2,frz/2, melt/2, varlist/2, varname/1]).
+adornments.pl::- use_module(intervals, [interval_to_conjunct/2, extend/2, partition/3,
+adornments.pl::- use_module(find_int_pos, [find_int_pos/2]).
+adornments.pl::- use_module(library(lists), [append/3,delete/3, member/2]).
+adornments.pl::- use_module(library(ordsets), [list_to_ord_set/2, ord_subtract/3,
+adornments.pl::- use_module(rec, [rec/6]).
+adornments.pl::- use_module(simplify_symb, [combine/2]).
+
+apply.pl::- module(apply, [apply/3]).
+apply.pl::- use_module(adorn, [original_free_atom/3]).
+apply.pl::- use_module(library(lists), [nth0/3]).
+apply.pl::- use_module(library(clpfd)).
+
+atom.pl::- module(atom, [arithmetic/1,
+atom.pl::- use_module(library(lists), [append/3, is_list/1]).
+
+aux.pl::- module(aux, [all_but_nth/4,all_but_nth0/4,
+aux.pl::- use_module(library(lists), [is_list/1, delete/3, member/2]).
+aux.pl::- use_module(library(terms), [variant/2]).
+
+check_clp.pl::- module(check_clp, [check_clp/1,check_clp_/1]).
+check_clp.pl::- use_module(library(clpq)).
+
+comma.pl::- module(comma,[add_true/2,comma_append/3,comma_append1/3,
+
+conditions.pl::- use_module(library(lists), [append/3, is_list/1, member/2, nth/3, nth0/3]).
+conditions.pl::- use_module(library(ordsets), [list_to_ord_set/2, ord_subset/2]).
+conditions.pl::- use_module(adorn, [code_all/3, code/3, decode/3, original_free_atom/3]).
+conditions.pl::- use_module(apply, [apply/3]).
+conditions.pl::- use_module(atom, [fresh_all/2]).
+conditions.pl::- use_module(aux, [all_but_nth/4, all_but_nth0/4, assert_list/2,
+conditions.pl::- use_module(functors, [functors/2]).
+conditions.pl::- use_module(intervals, [to_intervals/2,tree_to_list_/3]).
+conditions.pl::- use_module(numvars, [diff_vars/2, frz/2, frzl/2,  varname/1]).
+conditions.pl::- use_module(simplify_symb, [combine/2, simplify_symb/2]).
+conditions.pl::- use_module(solve, [solve/3]).
+
+constraints.pl::- module(constraints, [simplify/2]).
+constraints.pl::- use_module(aux, [time/1, timer/1]).
+
+defs.pl::- module(defs, [operators_file_name/1, output_file_name/1, type_analysis_working_directory/1]).
+
+filter.pl::- module(filter,[filter_clauses/3,filter_undefined/3]).
+filter.pl::- use_module(library(lists), [append/3, member/2]).
+filter.pl::- use_module(atom, [built_in/1, fresh_all/2]).
+
+find_int_pos.pl::- module(find_int_pos, [find_int_pos/2]).
+find_int_pos.pl::- use_module(atom, [comparison/1, fresh_all/2, is_atom/1]).
+find_int_pos.pl::- use_module(aux, [id_member/2]).
+find_int_pos.pl::- use_module(simplify_symb, [combine/2]).
+find_int_pos.pl::- use_module(library(lists), [append/3, member/2]).
+find_int_pos.pl::- use_module(library(ordsets), [list_to_ord_set/2, ord_union/3]).
+find_int_pos.pl::- use_module(numvars, [diff_vars/2, frz/2, frzl/2, varname/1]).
+
+functors.pl::- module(functors, [functors/2]).
+functors.pl::- use_module(atom, [built_in/1,fresh_all/2]).
+functors.pl::- use_module(numvars, [varname/1]).
+functors.pl::- use_module(library(lists), [append/3, member/2]).
+
+intervals.pl::- module(intervals, [interval_to_conjunct/2,extend/2, partition/3,
+intervals.pl::- use_module(library(lists), [append/3, member/2, nth0/3, nth/3]).
+intervals.pl::- use_module(library(random), [random/3]).
+intervals.pl::- use_module(atom, [built_in/1, comparison/1, fresh_all/2]).
+intervals.pl::- use_module(aux, [flatten/2, rename/4, time/1, timer/1, id_member/2]).
+intervals.pl::- use_module(numvars, [frz/2, melt/2, varname/1, varname/2, vars/2]).
+intervals.pl::- use_module(rec, [rec/6]).
+intervals.pl::- use_module(simplify_symb, [combine/2]).
+intervals.pl::- use_module(check_clp, [check_clp_/1]).
+
+main.pl::- module(main, [main/4,not_enough_memory/1,good1/1,good2/1]).
+main.pl::- use_module(adornments,[ads_main/13]).
+main.pl::- use_module(adorn, [original_free_atom/3]).
+main.pl::- use_module(atom, [built_in/1, comparison/1, fresh_all/2]).
+main.pl::- use_module(aux, [all_unifiables/4, writel/1, timer/1]).
+main.pl::- use_module(comma,[add_true/2,comma_append1/3]).
+main.pl::- use_module(numvars, [diff_vars/2, frz/2, melt/2]).
+main.pl::- use_module(simplify_symb, [simplify_symb/2]).
+main.pl::- use_module(intervals, [simplify/2]).
+main.pl::- use_module(read_program, [read_program/2]).
+main.pl::- use_module(termination, [prove_termination/9]).
+main.pl::- use_module(type_inference, [type_inference/7]).
+main.pl::- use_module(filter,[filter_clauses/3,filter_undefined/3]).
+main.pl::- use_module(library(lists), [append/3, member/2]).
+main.pl::- use_module(library(ordsets), [ord_subtract/3]).
+
+num.pl::- module(
+num.pl::- use_module(atom, [comparison/1, is_atom/1, substitute_atom/4]).
+num.pl::- use_module(numvars, [melt/2, varlist/2, varname/1]).
+num.pl::- use_module(intervals, [partition/2]).
+
+numvars.pl::- module(numvars,[diff_vars/2, frz/2,frzl/2,frzl/3,melt/2,meltl/2,
+numvars.pl::- use_module(library(lists), [append/3]).
+
+read_program.pl::- module(read_program, [read_program/2]).
+read_program.pl::- use_module(comma,[add_true/2, has_true/1]).
+read_program.pl::- use_module(atom, [built_in/1, comparison/1, fresh_all/2]).
+read_program.pl::- use_module(aux, [variant_delete_all/3, flatten/2, id_member/2]).
+read_program.pl::- use_module(numvars, [frz/2, meltl/2]).
+read_program.pl::- use_module(library(lists), [append/3, length/2, member/2]).
+read_program.pl::- use_module(library(terms), [variant/2]).
+read_program.pl::- use_module(library(ordsets), [ord_union/3]).
+read_program.pl::- use_module(rec, [rec/6]).
+
+rec.pl::- module(rec, [rec/6]).
+rec.pl::- use_module(library(ordsets), [list_to_ord_set/2, ord_union/3]).
+rec.pl::- use_module(atom, [built_in/1, fresh_all/2]).
+rec.pl::- use_module(aux, [eliminate_duplicates/2, flatten/2,
+rec.pl::- use_module(library(lists),[append/3, member/2]).
+
+simplify_symb.pl::- module(simplify_symb, [combine/2,simplify_symb/2]).
+simplify_symb.pl::- use_module(numvars, [varname/1]).
+simplify_symb.pl::- use_module(comma, [remove_trues/2]).
+simplify_symb.pl::- use_module(library(lists), [append/3, is_list/1, member/2]).
+simplify_symb.pl::- use_module(library(ordsets), [is_ordset/1, list_to_ord_set/2,ord_union/3]).
+
+solve.pl::- module(solve, [solve/4]).
+solve.pl::- use_module(library(clpfd)).
+solve.pl::- use_module(library(clpq)).
+solve.pl::- use_module(library(lists), [append/3, reverse/2]).
+solve.pl::- use_module(library(ordsets), [ord_intersection/4]).
+solve.pl::- use_module(numvars, [sym_melt/3, diff_vars/2, melt/2, varname/1]).
+solve.pl::- use_module(aux, [all_in/2, writel/1]).
+solve.pl::- use_module(simplify_symb, [simplify_symb/2]).
+
+termination.pl::- module(termination, [prove_termination/9]).
+termination.pl::- use_module(library(lists), [append/3, is_list/1, member/2, nth/3, nth0/3]).
+termination.pl::- use_module(library(ordsets), [list_to_ord_set/2, ord_subset/2,
+termination.pl::- use_module(adorn, [code_all/3, code/3, decode/3, original_free_atom/3]).
+termination.pl::- use_module(apply, [apply/3]).
+termination.pl::- use_module(atom, [comparison/1, term_comparison/1, fresh_all/2]).
+termination.pl::- use_module(aux, [all_but_nth/4, all_but_nth0/4, assert_list/2,
+termination.pl::- use_module(functors, [functors/2]).
+termination.pl::- use_module(intervals, [to_intervals/2,tree_to_list_/3]).
+termination.pl::- use_module(numvars, [diff_vars/2, frz/2, frzl/2, frzl/3, melt/2,
+termination.pl::- use_module(simplify_symb, [combine/2, simplify_symb/2]).
+termination.pl::- use_module(solve, [solve/4]).
+
+type_inference.pl::- module(type_inference, [type_inference/7]).
+type_inference.pl::- use_module(comma, [comma_append/3, drop_true/2]).
+type_inference.pl::- use_module(atom, [built_in/1, fresh_all/2]).
+type_inference.pl::- use_module(aux, [appears/3, id_member/2, number_to_atom/2, write_quoted/1]).
+type_inference.pl::- use_module(defs, [operators_file_name/1, output_file_name/1, type_analysis_working_directory/1]).
+type_inference.pl::- use_module(library(lists), [append/3, delete/3, last/2, member/2, reverse/2]).
+type_inference.pl::- use_module(library(ordsets), [ord_subset/2]).
+type_inference.pl::- use_module(library(system), [delete_file/1, exec/3, shell/1, wait/2, working_directory/2]).
+
+% 22 different modules
+% 114 uses of different modules, 36 are uses of libraries, i.e., 114-36=78 uses of user-defined modules
+% no circular dependencies
+% Hence, e=78, n=22
+% Tree impurity according to p.308 is 2(e-n+1)/(n-1)(n-2) m(G) = 0.2714(2)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	TERMINWEB
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+analyser.pl::- module(analyser,[analyse/5, terminating/7]).
+analyser.pl::- use_module(params, [set_params/1]).
+analyser.pl::- use_module(symbolic_norm, [set_norm/1]).
+analyser.pl::- use_module(input, [input_file/1]).
+analyser.pl::- use_module(scc, [compute_sccs/1]).
+analyser.pl::- use_module(interpreters, [size_answers/1,pos_answers/1,
+analyser.pl::- use_module(term_check,[check_termination/3]).
+
+builtins.pl::- module(builtins, [builtin/1, assert_size_builtins/0,
+builtins.pl::- use_module(db, [db_assert/1]).
+
+constraints.pl::- module(constraints, [non_neg/2, consistent_constraints/1,
+constraints.pl::- use_module(library(clpr)).
+constraints.pl::- use_module(library(terms), [term_variables/2]).
+
+db.pl::- module(db,[db_assert/1,
+db.pl::- use_module(misc, [fresh_atoms/2, append_lists/2, same_pred/2]).
+db.pl::- use_module(constraints, [more_general_constraints/2,
+db.pl::- use_module(library(terms), [subsumes_chk/2, variant/2]).
+db.pl::- use_module(library(lists), [member/2, delete/3, nth/4]).
+
+input.pl::- module(input, [norm_clause/2, pos_clause/2, input_file/1,
+input.pl::- use_module(misc, [append_lists/2, fresh_atoms/2]).
+input.pl::- use_module(symbolic_norm, [symbolic_norm_clause/2]).
+input.pl::- use_module(make_prop, [make_prop/2]).    
+input.pl::- use_module(library(lists), [append/3]).
+input.pl::- use_module(library(charsio), [open_chars_stream/2]).
+input.pl::- use_module(library(terms), [variant/2]).
+
+interpreters.pl::- module(interpreters, [size_answers/1, pos_answers/1,
+interpreters.pl::- use_module(constraints, [more_general_constraints/2,
+interpreters.pl::- use_module(params, [most_general_calls/1, pairs_method/1]).
+interpreters.pl::- use_module(misc, [fresh_atoms/2]).
+interpreters.pl::- use_module(scc, [scc/2]).
+interpreters.pl::- use_module(input, [norm_clause/2, pos_clause/2]).
+interpreters.pl::- use_module(db, [cond_assert_size/2, cond_assert_pos/2,
+interpreters.pl::- use_module(size_dep, [get_size_relations/6,get_size_relations/5]).
+interpreters.pl::- use_module(builtins, [builtin/1,
+interpreters.pl::- use_module(library(lists), [select/3, append/3]).
+
+make_prop.pl::- module(make_prop, [make_prop/2]).
+make_prop.pl::- use_module(library(terms)).
+
+mecs.pl::- module(mecs,[get_mecs_dependencies/4, term_with_number/1]).
+mecs.pl::- use_module(constraints,[consistent_constraints/1,
+mecs.pl::- use_module(library(clpr)).
+mecs.pl::- use_module(library(lists), [append/3]).
+mecs.pl::- use_module(library(terms)).
+mecs.pl::- use_module(library(atts)).
+
+misc.pl::- module(misc, [fresh_atoms/2, subtract_list/3, concat_atoms/2,
+misc.pl::- use_module(library(lists), [delete/3, append/3]).
+misc.pl::- use_module(library(charsio), [write_to_chars/2]).
+
+params.pl::- module(params, [constraints_method/1, widen_at/1, pairs_method/1,
+
+polyhedra.pl::- module(polyhedra, [get_polyhedra_dependencies/4, hull/6,
+polyhedra.pl::- use_module(constraints,[consistent_constraints/1,
+polyhedra.pl::- use_module(library(clpr)).
+polyhedra.pl::- use_module(library(lists), [append/3]).
+
+scc.pl::- module(scc, [scc/2, compute_sccs/1, new_sccs/1]).
+scc.pl::- use_module(misc, [subtract_list/3, concat_atoms/2]).
+scc.pl::- use_module(input, [norm_clause/2]).
+scc.pl::- use_module(builtins, [builtin/1]).
+scc.pl::- use_module(library(ugraphs)).
+scc.pl::- use_module(library(lists)).
+scc.pl::- use_module(library(ordsets)).
+
+shell.pl::- module(shell, [main/0, test_query/0]).
+shell.pl::- use_module(analyser,[analyse/5, terminating/7]).
+
+size_dep.pl::- module(size_dep, [get_size_relations/6, get_size_relations/5]).
+size_dep.pl::- use_module(params, [constraints_method/1, widen_at/1]).
+size_dep.pl::- use_module(mecs, [get_mecs_dependencies/4]).
+size_dep.pl::- use_module(polyhedra, [get_polyhedra_dependencies/4,
+size_dep.pl::- use_module(misc,[get_new_atoms/4]).
+size_dep.pl::- use_module(db, [size_fact/4,size_bin/5,size_triplet/6,size_call/4]).
+size_dep.pl::- use_module(library(ordsets)).
+size_dep.pl::- use_module(library(lists)).
+size_dep.pl::- use_module(library(terms)).
+size_dep.pl::- use_module(library(atts)).
+
+symbolic_norm.pl::- module(symbolic_norm, [symbolic_norm_clause/2, set_norm/1]).
+symbolic_norm.pl::- use_module(library(lists)).
+symbolic_norm.pl::- use_module(library(terms)).
+
+term_check.pl::- module(term_check, [check_termination/3, add_test_constraints/5]).
+term_check.pl::- use_module(constraints, [consistent_constraints/1,
+term_check.pl::- use_module(size_dep, [get_size_relations/5]).
+term_check.pl::- use_module(db, [combine_triplets/0, triplet/4]).
+term_check.pl::- use_module(params, [most_general_calls/1]).
+term_check.pl::- use_module(library(lists), [append/3]).
+term_check.pl::- use_module(library(terms), [variant/2, subsumes_chk/2]).
+
+% 16 different modules
+% 63 uses of different modules, 28 are uses of libraries, i.e., 63-28=35 uses of user-defined modules
+% 1 circular dependency <scc,input>
+% Hence, e=34, n=16
+% Tree impurity according to p.308 is 2(e-n+1)/(n-1)(n-2) m(G) = 0.1809(5)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	WISSIE
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+alg_Intervallen.pl: :- module(intervallen,
+alg_Intervallen.pl::- use_module(library(clpfd)).
+
+alg_KleineAfstand.pl::- module(alg_KleineAfstand,[overal_kleine_afstand/1]).
+
+alg_Mod12.pl: :- module(alg_Mod12,[mod12/2]).
+
+alg_Stemdomeinen.pl::- use_module(library(clpfd)).
+alg_Stemdomeinen.pl: :- module(alg_Stemdomeinen,
+
+alg_VariatieConstraint.pl: :- module(alg_VariatieConstraint,[var_constr/1]).
+
+alg_Zang.pl: :- module(alg_Zang,
+
+alg_ZetToonhoogteLijst.pl: :- module(alg_ZetToonhoogteLijst,
+
+contrapunt.pl:  :- module(contrapunt, % Added by AS
+contrapunt.pl:  :- use_module(contrapuntVoegTenorToe).
+contrapunt.pl:  :- use_module(contrapuntVoegBasToe).
+contrapunt.pl:  :- use_module(contrapuntVoegAltToe).
+contrapunt.pl:  :- use_module(alg_ZetToonhoogteLijst).
+
+contrapuntVoegAltToe.pl: :- module(contrapuntVoegAltToe,[contrapunt_voeg_alt_toe/6]).
+contrapuntVoegAltToe.pl::- use_module(library(clpfd)).
+contrapuntVoegAltToe.pl::- use_module(library(lists)).
+contrapuntVoegAltToe.pl: :- use_module(contrapunt_NotenInToonaard).
+contrapuntVoegAltToe.pl: :- use_module(alg_Intervallen).
+contrapuntVoegAltToe.pl: :- use_module(alg_KleineAfstand).
+contrapuntVoegAltToe.pl: :- use_module(alg_VariatieConstraint).
+contrapuntVoegAltToe.pl: :- use_module(alg_Stemdomeinen).
+contrapuntVoegAltToe.pl: :- use_module(alg_Zang).
+
+contrapuntVoegBasToe.pl: :- module(contrapuntVoegBasToe,[contrapunt_voeg_bas_toe/6]).
+contrapuntVoegBasToe.pl::- use_module(library(clpfd)).
+contrapuntVoegBasToe.pl::- use_module(library(lists)).
+contrapuntVoegBasToe.pl: :- use_module(contrapunt_NotenInToonaard).
+contrapuntVoegBasToe.pl: :- use_module(alg_Intervallen).
+contrapuntVoegBasToe.pl: :- use_module(alg_KleineAfstand).
+contrapuntVoegBasToe.pl: :- use_module(alg_VariatieConstraint).
+contrapuntVoegBasToe.pl: :- use_module(alg_Stemdomeinen).
+contrapuntVoegBasToe.pl: :- use_module(alg_Zang).
+
+contrapuntVoegTenorToe.pl: :- module(contrapuntVoegTenorToe,[contrapunt_voeg_tenor_toe/5]).
+contrapuntVoegTenorToe.pl::- use_module(library(clpfd)).
+contrapuntVoegTenorToe.pl::- use_module(library(lists)).
+contrapuntVoegTenorToe.pl: :- use_module(contrapunt_NotenInToonaard).
+contrapuntVoegTenorToe.pl: :- use_module(alg_Intervallen).
+contrapuntVoegTenorToe.pl: :- use_module(alg_KleineAfstand).
+contrapuntVoegTenorToe.pl: :- use_module(alg_VariatieConstraint).
+contrapuntVoegTenorToe.pl: :- use_module(alg_Stemdomeinen).
+contrapuntVoegTenorToe.pl: :- use_module(alg_Zang).
+
+contrapunt_NotenInToonaard.pl: :- module(contrapunt_NotenInToonaard,
+
+harmonie.pl:  :- use_module(harmoniezoekAkkoord).
+harmonie.pl:  :- use_module(harmonievoegBasToe).
+harmonie.pl:  :- use_module(harmonievoegTenorAltToe).
+harmonie.pl:  :- use_module(alg_ZetToonhoogteLijst).
+
+harmonie_Akkoorden.pl::- module(harmonie_Akkoorden,[alle_noten_in_akkoord/4]).
+harmonie_Akkoorden.pl::- use_module(alg_Intervallen).
+
+harmonievoegBasToe.pl::- module(harmonievoegBasToe,[voeg_bas_toe/4]).
+harmonievoegBasToe.pl::- use_module(library(clpfd)).
+harmonievoegBasToe.pl::- use_module(library(lists)).
+harmonievoegBasToe.pl::- use_module(harmonie_Akkoorden).
+harmonievoegBasToe.pl::- use_module(alg_KleineAfstand).
+harmonievoegBasToe.pl::- use_module(alg_VariatieConstraint).
+harmonievoegBasToe.pl::- use_module(alg_Stemdomeinen).
+harmonievoegBasToe.pl::- use_module(alg_Zang).
+
+harmonievoegTenorAltToe.pl::- module(harmonievoegTenorAltToe,[voeg_tenor_alt_toe/7]).
+harmonievoegTenorAltToe.pl:  :- use_module(library(clpfd)).
+harmonievoegTenorAltToe.pl:  :- use_module(library(lists)).
+harmonievoegTenorAltToe.pl:  :- use_module(harmonie_Akkoorden).
+harmonievoegTenorAltToe.pl:  :- use_module(alg_KleineAfstand).
+harmonievoegTenorAltToe.pl:  :- use_module(alg_VariatieConstraint).
+harmonievoegTenorAltToe.pl:  :- use_module(alg_Stemdomeinen).
+harmonievoegTenorAltToe.pl:  :- use_module(alg_Mod12).
+harmonievoegTenorAltToe.pl:  :- use_module(alg_Zang).
+
+harmoniezoekAkkoord.pl: :- module(harmoniezoekAkkoord,[zoek_akkoorden/4]).
+harmoniezoekAkkoord.pl:  :- use_module(library(clpfd)).
+harmoniezoekAkkoord.pl:  :- use_module(library(lists)).
+harmoniezoekAkkoord.pl:  :- use_module(alg_Intervallen).
+harmoniezoekAkkoord.pl:  :- use_module(alg_Mod12).
+harmoniezoekAkkoord.pl:  :- use_module(alg_VariatieConstraint).
+
+% 16 different modules
+% 55 uses of different modules, 14 are uses of libraries, i.e., 55-14=41 uses of user-defined modules
+% no circular dependencies
+% Hence, e=41, n=16
+% Tree impurity according to p.308 is 2(e-n+1)/(n-1)(n-2) m(G) = 0.2476(1)
+
+
+
+
+
+
+
+
+
+
+
+
+

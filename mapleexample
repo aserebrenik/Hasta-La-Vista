@@ -1,0 +1,27 @@
+a := -pn1 - pni1 + pni2;
+b := p1 - pi1 + pi2;
+c := -2*pi1 + 999*pi2 - 999*pni1 + 2*pni2;
+exp1 := a*x^2 + b*x + c;
+d := -p1 - pi1 +pi2;
+e := pn1 - pni1 + pni2;
+f := 2*pi1 - 999*pi2 + 999*pni1 - 2*pni2;
+exp2 := d*x^2 + e*x + f;
+
+
+
+> sols[1] >= 1;
+                                2                             2
+1 <= 1/2 (-pi1 + pi2 + p1 + (pi1  - 2 pi1 pi2 - 2 p1 pi1 + pi2  + 2 p1 pi2
+
+         2
+     + p1  - 8 pn1 pi1 + 3996 pn1 pi2 - 3996 pn1 pni1 + 8 pn1 pni2
+
+                                             2
+     - 8 pi1 pni1 + 3996 pi2 pni1 - 3996 pni1  + 4004 pni1 pni2 + 8 pi1 pni2
+
+                             2 1/2
+     - 3996 pi2 pni2 - 8 pni2 )   )/(pn1 + pni1 - pni2)
+
+
+  
+

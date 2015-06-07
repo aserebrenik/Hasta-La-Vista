@@ -1,0 +1,4 @@
+:- trace, find_calls([query(append(f,f,b),[])],
+              [append([],L,L),
+               (append([X|Xs],Ys,[X|Zs]):-append(Xs,Ys,Zs))],
+              Calls).
